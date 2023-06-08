@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "./ChatHeader";
+import ChatHeader from "./ChatHeader";
 import { useEffect } from "react";
 import { useState } from "react";
 import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
@@ -8,7 +8,11 @@ import useUsersContext from "../../context/useUsersContext";
 import SendMessage from "./SendMessage";
 import ChatMessagesWindow from "./ChatMessagesWindow";
 
-export default function ChatRoom({ selectedRoomID, allChatsData }) {
+export default function ChatRoom({
+  selectedRoomID,
+  allChatsData,
+  setIsSettingsOpen,
+}) {
   const [roomData, setRoomData] = useState(null);
 
   const { currentUser } = useUsersContext();
@@ -54,7 +58,10 @@ export default function ChatRoom({ selectedRoomID, allChatsData }) {
 
   return (
     <div className="w-full h-full">
-      <Header otherUserData={otherUserData} />
+      <ChatHeader
+        setIsSettingsOpen={setIsSettingsOpen}
+        otherUserData={otherUserData}
+      />
       <div className="w-full h-[90%] flex justify-center items-center">
         {roomData ? (
           <div className="w-full h-full">

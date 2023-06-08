@@ -10,7 +10,6 @@ import {
   LoginPage,
   SignUpPage,
   HomePage,
-  SettingsPage,
 } from "./pages/export-pages";
 
 import "./style/styles-import";
@@ -28,7 +27,6 @@ function App() {
 
             <Route element={<ProtectedRoute />}>
               <Route path="/Home" element={<HomePage />} />
-              <Route path="/Settings" element={<SettingsPage />} />
             </Route>
             <Route path="*" element={<DefaultPage />} />
           </Routes>

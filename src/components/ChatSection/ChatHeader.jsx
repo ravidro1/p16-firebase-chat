@@ -1,14 +1,9 @@
 import { useState } from "react";
 import threeDots from "/assets/three-dots.svg";
 import useUsersContext from "../../context/useUsersContext";
-import useGenericContext from "../../context/useGenericContext";
-import { doc, getDoc } from "firebase/firestore";
-import { dataBase } from "../../firebase/FirebaseConfig";
-import { useEffect } from "react";
 
-export default function Header({ otherUserData }) {
-  const { logoutAuth, currentUser } = useUsersContext();
-  const { navigate } = useGenericContext();
+export default function ChatHeader({ otherUserData, setIsSettingsOpen }) {
+  const { logoutAuth } = useUsersContext();
 
   const [isNavBarOpen, setIsNavBarOpen] = useState(false);
 
@@ -45,7 +40,7 @@ export default function Header({ otherUserData }) {
       >
         {" "}
         <button
-          onClick={() => navigate("/Settings")}
+          onClick={() => setIsSettingsOpen((prev) => !prev)}
           className=" p-4 border-b border-white hover:bg-slate-500 w-full h-[50%]"
         >
           settings{" "}
@@ -61,8 +56,4 @@ export default function Header({ otherUserData }) {
   );
 }
 
-{
-  /* <button onClick={() => navigate("/Home")} className="bg-black p-4">
-Home{" "}
-</button> */
-}
+

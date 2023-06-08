@@ -32,7 +32,6 @@ export default function SignUpInput({
     <div className="flex w-[300px] max-w-[90%] flex-col">
       <div className="relative flex justify-center">
         <input
-          id={"input-" + formDataKey}
           ref={inputRef}
           pattern={pattern}
           className={
