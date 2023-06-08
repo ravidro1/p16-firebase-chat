@@ -18,10 +18,9 @@ export default function ContactItem({
 
   const getRoomOfCombineUsersData = async () => {
     const roomMessages = (await getRoomOfCombineUsers(user)).messages;
-    console.log();
     const lastMessage = roomMessages.at(-1);
     lastMessage.user = await getUser(lastMessage.user_id);
-    console.log(lastMessage);
+    // console.log(lastMessage);
     setLastRoomMessage(lastMessage);
   };
 

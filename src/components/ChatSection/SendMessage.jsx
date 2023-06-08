@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import useUsersContext from "../../context/useUsersContext";
 import { dataBase } from "../../Firebase/FirebaseConfig";
-import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 
 export default function SendMessage({ roomData }) {
   const [messageValue, setMessageValue] = useState("");
@@ -12,12 +12,10 @@ export default function SendMessage({ roomData }) {
   const send = async () => {
     if (!messageValue) return;
     try {
-      console.log(serverTimestamp());
-
+      console.log(roomData);
       const lastMessages = roomData.messages;
       const newLastMessages = [
         ...lastMessages,
-        ,
         {
           content: messageValue,
           user_id: currentUser.uid,
@@ -36,7 +34,7 @@ export default function SendMessage({ roomData }) {
   };
 
   return (
-    <div className="w-full h-full">
+    <form onSubmit={(e) => e.preventDefault()} className="w-full h-full">
       {" "}
       <input
         onChange={(e) => setMessageValue(e.target.value)}
@@ -49,6 +47,6 @@ export default function SendMessage({ roomData }) {
         {" "}
         SEND{" "}
       </button>
-    </div>
+    </form>
   );
 }

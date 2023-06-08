@@ -6,6 +6,7 @@ import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
 import { dataBase } from "../../firebase/FirebaseConfig";
 import useUsersContext from "../../context/useUsersContext";
 import SendMessage from "./SendMessage";
+import ChatMessagesWindow from "./ChatMessagesWindow";
 
 export default function ChatRoom({ selectedRoomID, allChatsData }) {
   const [roomData, setRoomData] = useState(null);
@@ -52,17 +53,16 @@ export default function ChatRoom({ selectedRoomID, allChatsData }) {
   };
 
   return (
-    <div className="w-full h-full bg-green-900">
+    <div className="w-full h-full">
       <Header otherUserData={otherUserData} />
-      <div className="w-full h-[90%] bg-teal-800 flex justify-center items-center">
-        {selectedRoomID ? (
+      <div className="w-full h-[90%] flex justify-center items-center">
+        {roomData ? (
           <div className="w-full h-full">
-            <section className="w-full h-[90%] bg-red-500"></section>
+            <section className="w-full h-[90%]">
+              <ChatMessagesWindow roomData={roomData} />
+            </section>
             <section className="w-full h-[10%] ">
-              <SendMessage
-                roomData={roomData}
-                selectedRoomID={selectedRoomID}
-              />
+              <SendMessage roomData={roomData} />
             </section>{" "}
           </div>
         ) : (
