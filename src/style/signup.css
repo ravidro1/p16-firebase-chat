@@ -1,0 +1,34 @@
+input + span {
+  margin-inline: 5px;
+}
+
+/* input:invalid:not(:placeholder-shown) + span::before {
+  content: "✖";
+  color: red;
+  width: fit-content;
+}
+
+input:valid + span::before {
+  content: "✓";
+  color: green;
+  width: fit-content;
+} */
+
+.customInvalid-signUp::before {
+  position: absolute;
+  content: "✖";
+  color: red;
+  width: fit-content;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.customValid-signUp::before {
+  position: absolute;
+
+  content: "✓";
+  color: green;
+  width: fit-content;
+  top: 50%;
+  transform: translateY(-50%);
+}
