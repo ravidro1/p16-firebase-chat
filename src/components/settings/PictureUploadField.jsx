@@ -60,7 +60,7 @@ export default function PictureUploadField() {
   };
 
   return (
-    <div className="w-[400px] flex h-[60px]  m-5">
+    <div className="w-[400px] flex xl:h-[60px] h-[45px] xl:m-5 m-3">
       <input
         ref={fileInputRef}
         hidden={"hidden"}

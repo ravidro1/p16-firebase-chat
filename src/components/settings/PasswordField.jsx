@@ -32,7 +32,7 @@ export default function PasswordField() {
       setErrorMessage(`something went wrong`);
     }
   };
-  console.log(currentUser);
+  //   console.log(currentUser);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isVerifyPasswordValid, setIsVerifyPasswordValid] = useState(false);
 
@@ -47,9 +47,9 @@ export default function PasswordField() {
   return (
     <form
       onSubmit={(e) => e.preventDefault()}
-      className="flex w-[100%] justify-around"
+      className="flex w-[100%] justify-around flex-wrap "
     >
-      <section className="w-[400px] h-[60px] max-w-[90%] flex m-5 relative">
+      <section className="w-[400px]  max-w-[90%] flex xl:h-[60px] h-[45px] xl:m-5 m-3 relative">
         <input
           ref={verifyPasswordRef}
           onChange={(e) => setVerifyPasswordValue(e.target.value)}
@@ -62,7 +62,7 @@ export default function PasswordField() {
         />
         <span
           className={
-            "" +
+            "m-0 " +
             (verifyPasswordValue.length > 0 &&
               (isVerifyPasswordValid
                 ? "customValid-signUp"
@@ -71,8 +71,8 @@ export default function PasswordField() {
         />
       </section>
 
-      <section className="w-[400px] max-w-[90%] h-[60px] flex flex-col m-5 relative">
-        <div className="w-[100%] flex ">
+      <section className="w-[400px] max-w-[90%]  flex flex-col xl:m-5 m-3 ">
+        <div className="w-[100%] flex xl:h-[60px] h-[45px] relative">
           <input
             ref={passwordRef}
             className="w-[70%]  rounded-l-lg h-[100%] p-4"

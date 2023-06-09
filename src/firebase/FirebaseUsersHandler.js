@@ -10,8 +10,9 @@ import {
 } from "firebase/firestore";
 
 import { useEffect, useState } from "react";
-import { auth, dataBase } from "./FirebaseConfig";
+import { auth, dataBase, storage } from "./FirebaseConfig";
 import { createUserWithEmailAndPassword, deleteUser } from "firebase/auth";
+import { ref, deleteObject } from "firebase/storage";
 
 function FirebaseUsersHandler() {
   const [allUsersData, setAllUsersData] = useState([]);
@@ -39,7 +40,7 @@ function FirebaseUsersHandler() {
     await updateDoc(userDocRef, fields);
   };
 
-  const signUpUserToDB = async (tempUserData) => {
+  const signUpUser = async (tempUserData) => {
     let isSuccess = false;
     try {
       console.log(tempUserData.email, tempUserData.password);
@@ -66,20 +67,30 @@ function FirebaseUsersHandler() {
     });
   };
 
-  const deleteUserFromDB = async (user) => {
-    await deleteDoc(doc(dataBase, "users", user.uid));
-    await deleteDoc(doc(dataBase, "userChat", user.uid));
-    await deleteUser(user);
+  const deleteCurrentUser = async (user) => {
+    try {
+      await deleteObject(ref(storage, user.uid));
+    } catch (error) {
+      console.error(error);
+    }
+    try {
+      await deleteDoc(doc(dataBase, "users", user.uid));
+      // Delete the file from storage
+      await deleteUser(user);
 
-    // delete picture from storage
+      // await deleteDoc(doc(dataBase, "userChat", user.uid));
+      //delete chats
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return {
     allUsersData,
 
     updateUser,
-    deleteUserFromDB,
-    signUpUserToDB,
+    deleteCurrentUser,
+    signUpUser,
     getUser,
   };
 }

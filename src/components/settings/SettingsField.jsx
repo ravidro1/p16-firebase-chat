@@ -17,8 +17,8 @@ import { useEffect } from "react";
 export default function SettingsField({
   fieldKey,
   placeholder,
-  type,
-  pattern,
+  type = "text",
+  pattern = null,
   currentUser,
 }) {
   const [inputValue, setInputValue] = useState("");
@@ -95,10 +95,10 @@ export default function SettingsField({
   }, [inputValue, errorMessage]);
 
   return (
-    <div className="w-[400px] max-w-[90%] flex flex-col m-5">
+    <div className="w-[400px] max-w-[90%] flex flex-col xl:m-5 m-3">
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="flex h-[60px] relative"
+        className="flex xl:h-[60px] h-[45px] relative"
       >
         <input
           ref={inputRef}

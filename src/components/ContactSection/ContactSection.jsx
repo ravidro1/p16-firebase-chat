@@ -3,8 +3,9 @@ import SearchContact from "./SearchContact";
 import { useState } from "react";
 import ContactList from "./ContactList";
 
-export default function ContactSection({ setSelectedRoomID, allChatsData }) {
+export default function ContactSection() {
   const [searchValue, setSearchValue] = useState("");
+
   return (
     <div className="w-full h-full bg-orange-700">
       <section className="w-full h-[10%]">
@@ -14,11 +15,7 @@ export default function ContactSection({ setSelectedRoomID, allChatsData }) {
         />
       </section>
       <section className="w-full h-[90%]">
-        <ContactList
-          allChatsData={allChatsData}
-          setSelectedRoomID={setSelectedRoomID}
-          searchValue={searchValue}
-        />
+        <ContactList searchValue={searchValue} />
       </section>
     </div>
   );

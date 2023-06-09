@@ -2,11 +2,11 @@ import React from "react";
 import ChatHeader from "./ChatHeader";
 import { useEffect } from "react";
 import { useState } from "react";
-import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
-import { dataBase } from "../../firebase/FirebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
 import useUsersContext from "../../context/useUsersContext";
 import SendMessage from "./SendMessage";
 import ChatMessagesWindow from "./ChatMessagesWindow";
+import { dataBase } from "../../Firebase/FirebaseConfig";
 
 export default function ChatRoom({
   selectedRoomID,
@@ -21,7 +21,7 @@ export default function ChatRoom({
   const [currentUserData, setCurrentUserData] = useState(null);
 
   useEffect(() => {
-    getRoomData();
+    if (selectedRoomID) getRoomData();
   }, [selectedRoomID, allChatsData]);
 
   useEffect(() => {

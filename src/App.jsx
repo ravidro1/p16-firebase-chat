@@ -1,5 +1,4 @@
-import { useState } from "react";
-import GenericContextProvider from "./context/GenericContextProvider";
+import ChatContextProvider from "./context/ChatContextProvider";
 import UsersContextProvider from "./context/UsersContextProvider";
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/LoginAndSignUp/autoNavigate/ProtectedRoute";
@@ -16,7 +15,7 @@ import "./style/styles-import";
 
 function App() {
   return (
-    <GenericContextProvider>
+    <ChatContextProvider>
       <UsersContextProvider>
         <div className="h-[100vh] w-[100vw] bg-[#1F6F8B]">
           <Routes>
@@ -32,7 +31,7 @@ function App() {
           </Routes>
         </div>{" "}
       </UsersContextProvider>
-    </GenericContextProvider>
+    </ChatContextProvider>
   );
 }
 

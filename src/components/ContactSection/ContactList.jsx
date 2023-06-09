@@ -2,26 +2,14 @@ import React from "react";
 import ContactItem from "./ContactItem";
 import { useState } from "react";
 import { useEffect } from "react";
-import {
-  and,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  setDoc,
-  updateDoc,
-  where,
-} from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { dataBase } from "../../Firebase/FirebaseConfig";
 import useUsersContext from "../../context/useUsersContext";
+import useChatContext from "../../context/useChatContext";
 
-export default function ContactList({
-  searchValue,
-  setSelectedRoomID,
-  allChatsData,
-}) {
-  const { currentUser, allUsersData } = useUsersContext();
+export default function ContactList({ searchValue }) {
+  const { currentUser, allUsersData, getUser } = useUsersContext();
+  const { setSelectedRoomId } = useChatContext();
   const [contactArray, setContactArray] = useState([]);
 
   useEffect(() => {
@@ -30,9 +18,7 @@ export default function ContactList({
   }, [searchValue, allUsersData]);
 
   const getUserRooms = async () => {
-    const currentUserData = (
-      await getDoc(doc(dataBase, "users", currentUser.uid))
-    ).data();
+    const currentUserData = await getUser(currentUser.uid);
     const arrayOfUsers = [];
 
     currentUserData.lastUsersIDs.forEach((user_id) => {
@@ -90,7 +76,7 @@ export default function ContactList({
         lastUsersIDs: userFilterLastUsersIDsField,
       });
 
-      setSelectedRoomID(combinedID);
+      setSelectedRoomId(combinedID);
     } catch (error) {
       console.log(error);
     }
@@ -109,11 +95,17 @@ export default function ContactList({
       return null;
     }
   };
+
   return (
     <div className="w-full h-full overflow-auto">
       {contactArray.map((user, index) => {
         return (
-          <ContactItem getRoomOfCombineUsers={getRoomOfCombineUsers} selectHandle={selectHandle} key={index} user={user} />
+          <ContactItem
+            getRoomOfCombineUsers={getRoomOfCombineUsers}
+            selectHandle={selectHandle}
+            key={index}
+            user={user}
+          />
         );
       })}
     </div>
