@@ -1,9 +1,9 @@
-import { useState } from "react";
+import {useState} from "react";
 import threeDots from "/assets/three-dots.svg";
 import useUsersContext from "../../context/useUsersContext";
 
-export default function ChatHeader({ otherUserData, setIsSettingsOpen }) {
-  const { logoutAuth } = useUsersContext();
+export default function ChatHeader({otherUserData, setIsSettingsOpen}) {
+  const {logoutAuth} = useUsersContext();
 
   const [isNavBarOpen, setIsNavBarOpen] = useState(false);
 
@@ -43,17 +43,15 @@ export default function ChatHeader({ otherUserData, setIsSettingsOpen }) {
           onClick={() => setIsSettingsOpen((prev) => !prev)}
           className=" p-4 border-b border-white hover:bg-slate-500 w-full h-[50%]"
         >
-          settings{" "}
+          Settings{" "}
         </button>
         <button
           onClick={() => logoutAuth()}
           className=" p-4 border-b border-white hover:bg-slate-500  w-full h-[50%]"
         >
-          logout{" "}
+          Logout{" "}
         </button>
       </div>
     </div>
   );
 }
-
-

@@ -1,6 +1,6 @@
 import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
+import {useState} from "react";
+import {useEffect} from "react";
 import useUsersContext from "../../context/useUsersContext";
 
 export default function ContactItem({
@@ -10,7 +10,7 @@ export default function ContactItem({
 }) {
   const [lastRoomMessage, setLastRoomMessage] = useState(null);
 
-  const { getUser } = useUsersContext();
+  const {getUser} = useUsersContext();
 
   useEffect(() => {
     getRoomOfCombineUsersData();
@@ -60,7 +60,7 @@ export default function ContactItem({
         <p>
           {lastRoomMessage?.user?.nickName}:{lastRoomMessage?.content}
         </p>
-        <p>{getFormatTime()}</p>
+        <p>{getFormatTime(lastRoomMessage)}</p>
       </div>
     </button>
   );

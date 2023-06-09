@@ -1,11 +1,11 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import OneMessage from "./OneMessage";
 import useUsersContext from "../../context/useUsersContext";
-import { useRef } from "react";
-import { useEffect } from "react";
+import useChatContext from "../../context/useChatContext";
 
-export default function ChatMessagesWindow({ roomData }) {
-  const { currentUser } = useUsersContext();
+export default function ChatMessagesWindow() {
+  const {currentUser} = useUsersContext();
+  const {currentChatData} = useChatContext();
 
   const lastMessageRef = useRef();
 
@@ -15,15 +15,19 @@ export default function ChatMessagesWindow({ roomData }) {
       block: "end",
       inline: "nearest",
     });
-  }, [roomData]);
+  }, [currentChatData]);
 
   return (
     <div className="w-full h-full bg-slate-500 overflow-auto">
-      {roomData?.messages.map((message, index) => {
+      {currentChatData?.messages.map((message, index) => {
         const isSenderCurrentUser = message.user_id == currentUser.uid;
         return (
           <div
-            ref={index == roomData?.messages.length - 1 ? lastMessageRef : null}
+            ref={
+              index == currentChatData?.messages.length - 1
+                ? lastMessageRef
+                : null
+            }
             className={
               "w-full flex " +
               (isSenderCurrentUser ? "justify-start" : "justify-end")

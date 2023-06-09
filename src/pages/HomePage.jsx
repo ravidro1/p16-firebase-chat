@@ -1,10 +1,7 @@
 import React from "react";
 import ContactSection from "../components/ContactSection/ContactSection";
 import ChatRoom from "../components/ChatSection/ChatRoom";
-import { useState } from "react";
-import { collection, onSnapshot } from "firebase/firestore";
-import { dataBase } from "../Firebase/FirebaseConfig";
-import { useEffect } from "react";
+import {useState} from "react";
 import Settings from "../components/settings/Settings";
 
 export default function HomePage() {

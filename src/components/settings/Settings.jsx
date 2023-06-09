@@ -1,26 +1,13 @@
 import React from "react";
 import useUsersContext from "../../context/useUsersContext";
-import { useState } from "react";
-import { useEffect } from "react";
 import SettingsField from "./SettingsField";
 import PictureUploadField from "./PictureUploadField";
 import PasswordField from "./PasswordField";
-import { storage } from "../../Firebase/FirebaseConfig";
-import { deleteObject, ref } from "firebase/storage";
+import {storage} from "../../Firebase/FirebaseConfig";
+import {deleteObject, ref} from "firebase/storage";
 
-export default function Settings({ setIsSettingsOpen }) {
-  const { deleteUserFromDB, currentUser, getUser, logoutAuth } =
-    useUsersContext();
-
-  const [currentUserData, setCurrentUserData] = useState(null);
-  useEffect(() => {
-    getCurrentUserData();
-  }, [currentUser]);
-
-  const getCurrentUserData = async () => {
-    const userData = await getUser(currentUser.uid);
-    setCurrentUserData(userData);
-  };
+export default function Settings({setIsSettingsOpen}) {
+  const {deleteCurrentUser, currentUser, logoutAuth} = useUsersContext();
 
   return (
     <div className="w-full h-full flex flex-col justify-center items-center">
@@ -87,7 +74,7 @@ export default function Settings({ setIsSettingsOpen }) {
           Logout
         </button>
         <button
-          onClick={() => deleteUserFromDB(currentUser)}
+          onClick={() => deleteCurrentUser(currentUser)}
           className="bg-[#d81212] p-4 rounded-lg h-[60px] min-w-fit w-[200px]"
         >
           Delete Account

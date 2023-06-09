@@ -1,59 +1,30 @@
 import React from "react";
 import ChatHeader from "./ChatHeader";
-import { useEffect } from "react";
-import { useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
+import {useEffect} from "react";
+import {useState} from "react";
 import useUsersContext from "../../context/useUsersContext";
+import useChatContext from "../../context/useChatContext";
 import SendMessage from "./SendMessage";
 import ChatMessagesWindow from "./ChatMessagesWindow";
-import { dataBase } from "../../Firebase/FirebaseConfig";
 
-export default function ChatRoom({
-  selectedRoomID,
-  allChatsData,
-  setIsSettingsOpen,
-}) {
-  const [roomData, setRoomData] = useState(null);
-
-  const { currentUser } = useUsersContext();
+export default function ChatRoom({setIsSettingsOpen}) {
+  const {currentUser, getUser} = useUsersContext();
+  const {currentChatData} = useChatContext();
 
   const [otherUserData, setOtherUserData] = useState(null);
-  const [currentUserData, setCurrentUserData] = useState(null);
 
   useEffect(() => {
-    if (selectedRoomID) getRoomData();
-  }, [selectedRoomID, allChatsData]);
-
-  useEffect(() => {
-    if (roomData) getParticipantsData();
-  }, [roomData]);
-
-  const getRoomData = async () => {
-    try {
-      const data = (
-        await getDoc(doc(dataBase, "chatRoom", selectedRoomID))
-      ).data();
-      setRoomData(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    if (currentChatData) getParticipantsData();
+  }, [currentChatData]);
 
   const getParticipantsData = async () => {
-    const participants = roomData.participants;
+    const participants = currentChatData.participants;
     const otherUserID = participants.filter(
       (user_id) => user_id != currentUser.uid
     );
-    const otherUserDoc = (
-      await getDoc(doc(dataBase, "users", otherUserID[0]))
-    ).data();
 
-    const currentUserDoc = (
-      await getDoc(doc(dataBase, "users", currentUser.uid))
-    ).data();
-
+    const otherUserDoc = await getUser(otherUserID[0]);
     setOtherUserData(otherUserDoc);
-    setCurrentUserData(currentUserDoc);
   };
 
   return (
@@ -63,13 +34,13 @@ export default function ChatRoom({
         otherUserData={otherUserData}
       />
       <div className="w-full h-[90%] flex justify-center items-center">
-        {roomData ? (
+        {currentChatData ? (
           <div className="w-full h-full">
             <section className="w-full h-[90%]">
-              <ChatMessagesWindow roomData={roomData} />
+              <ChatMessagesWindow />
             </section>
             <section className="w-full h-[10%] ">
-              <SendMessage roomData={roomData} />
+              <SendMessage />
             </section>{" "}
           </div>
         ) : (

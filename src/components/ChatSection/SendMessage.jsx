@@ -1,19 +1,17 @@
-import React from "react";
-import { useState } from "react";
+import React, {useState} from "react";
 import useUsersContext from "../../context/useUsersContext";
-import { dataBase } from "../../Firebase/FirebaseConfig";
-import { doc, updateDoc } from "firebase/firestore";
+import useChatContext from "../../context/useChatContext";
 
-export default function SendMessage({ roomData }) {
+export default function SendMessage({}) {
   const [messageValue, setMessageValue] = useState("");
 
-  const { currentUser } = useUsersContext();
+  const {currentUser} = useUsersContext();
+  const {currentChatData, updateChatData} = useChatContext();
 
   const send = async () => {
     if (!messageValue) return;
     try {
-      console.log(roomData);
-      const lastMessages = roomData.messages;
+      const lastMessages = currentChatData.messages;
       const newLastMessages = [
         ...lastMessages,
         {
@@ -23,9 +21,7 @@ export default function SendMessage({ roomData }) {
         },
       ];
 
-      await updateDoc(doc(dataBase, "chatRoom", roomData.uid), {
-        messages: newLastMessages,
-      });
+      await updateChatData({messages: newLastMessages});
 
       setMessageValue("");
     } catch (error) {

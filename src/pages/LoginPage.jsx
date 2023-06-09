@@ -1,12 +1,13 @@
 import React from "react";
-import { useState } from "react";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import ForgotMyPassword from "../Components/LoginAndSignUp/ForgotMyPassword";
 import useUsersContext from "../context/useUsersContext";
-import useGenericContext from "../context/useGenericContext";
 
 function LoginPage() {
-  const { navigate } = useGenericContext();
-  const { setCurrentUser, loginAuth } = useUsersContext();
+  const navigate = useNavigate();
+  
+  const {loginAuth} = useUsersContext();
 
   const [isWrongCredentials, setIsWrongCredentials] = useState(false);
   const [isForgotMyPasswordClicked, setIsForgotMyPasswordClicked] =

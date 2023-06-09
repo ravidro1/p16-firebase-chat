@@ -1,17 +1,17 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, {useEffect} from "react";
+import {useState} from "react";
 // import emailjs from "@emailjs/browser";
 import SignUpInput from "../components/LoginAndSignUp/SignUpInput";
 
 import useUsersContext from "../context/useUsersContext";
-import useGenericContext from "../context/useGenericContext";
-import { getDownloadURL, ref } from "firebase/storage";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { dataBase, storage } from "../firebase/FirebaseConfig";
+import {getDownloadURL, ref} from "firebase/storage";
+import {collection, getDocs, query, where} from "firebase/firestore";
+import {dataBase, storage} from "../firebase/FirebaseConfig";
+import {useNavigate} from "react-router-dom";
 
 function SignUpPage() {
-  const { navigate } = useGenericContext();
-  const { signUpUserToDB, allUsersData } = useUsersContext();
+  const navigate = useNavigate();
+  const {signUpUser} = useUsersContext();
 
   const [keysWithErrors, setKeysWithErrors] = useState({});
   const [isServerErrorMessageShown, setIsServerErrorMessageShown] =
@@ -79,7 +79,7 @@ function SignUpPage() {
         );
         tempUserData.profilePic = defaultProfilePictureURL;
 
-        await signUpUserToDB(tempUserData);
+        await signUpUser(tempUserData);
         document.signup_form.reset();
         setPassword("");
 

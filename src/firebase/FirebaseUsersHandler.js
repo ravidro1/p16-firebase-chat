@@ -1,5 +1,4 @@
 import {
-  addDoc,
   collection,
   deleteDoc,
   doc,
@@ -9,10 +8,10 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
-import { useEffect, useState } from "react";
-import { auth, dataBase, storage } from "./FirebaseConfig";
-import { createUserWithEmailAndPassword, deleteUser } from "firebase/auth";
-import { ref, deleteObject } from "firebase/storage";
+import {useEffect, useState} from "react";
+import {auth, dataBase, storage} from "./FirebaseConfig";
+import {createUserWithEmailAndPassword, deleteUser} from "firebase/auth";
+import {ref, deleteObject} from "firebase/storage";
 
 function FirebaseUsersHandler() {
   const [allUsersData, setAllUsersData] = useState([]);
@@ -21,7 +20,7 @@ function FirebaseUsersHandler() {
     const unsub = onSnapshot(collection(dataBase, "users"), (snapshot) => {
       const tempAllUserData = [];
       snapshot.docs.forEach((doc) => {
-        tempAllUserData.push({ ...doc.data(), id: doc.id });
+        tempAllUserData.push({...doc.data(), id: doc.id});
         setAllUsersData(tempAllUserData);
       });
     });
@@ -43,7 +42,7 @@ function FirebaseUsersHandler() {
   const signUpUser = async (tempUserData) => {
     let isSuccess = false;
     try {
-      console.log(tempUserData.email, tempUserData.password);
+      // console.log(tempUserData.email, tempUserData.password);
       const res = await createUserWithEmailAndPassword(
         auth,
         tempUserData.email,

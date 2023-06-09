@@ -1,28 +1,23 @@
 import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { createContext } from "react";
+import {useEffect} from "react";
+import {useState} from "react";
+import {createContext} from "react";
 import FirebaseUsersHandler from "../Firebase/FirebaseUsersHandler";
 import {
-  createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { auth } from "../Firebase/FirebaseConfig";
+import {auth} from "../Firebase/FirebaseConfig";
 
 export const UsersContext = createContext();
 
 const UsersContextData = () => {
-  const {
-    updateUser,
-    allUsersData,
-    deleteUserFromDB,
-    signUpUserToDB,
-    getUser,
-  } = FirebaseUsersHandler();
+  const {updateUser, allUsersData, deleteCurrentUser, signUpUser, getUser} =
+    FirebaseUsersHandler();
 
   const [currentUser, setCurrentUser] = useState(null);
+  const [currentUserData, setCurrentUserData] = useState(null);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
@@ -34,6 +29,12 @@ const UsersContextData = () => {
     };
   }, []);
 
+  useEffect(() => {
+    async () => {
+      setCurrentUserData(await getUser(currentUser.uid));
+    };
+  }, [currentUser]);
+
   const loginAuth = (email, password) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
@@ -41,44 +42,38 @@ const UsersContextData = () => {
     return signOut(auth);
   };
 
+  const getUserRooms = async () => {
+    const currentUserData = await getUser(currentUser.uid);
+    const arrayOfUsers = [];
+
+    currentUserData.lastUsersIDs.forEach((user_id) => {
+      allUsersData.forEach((user) => {
+        if (user_id == user.uid) arrayOfUsers.push(user);
+      });
+    });
+    return arrayOfUsers;
+  };
+
   return {
     currentUser,
-    setCurrentUser,
+    currentUserData,
+
     updateUser,
     allUsersData,
-    deleteUserFromDB,
-    signUpUserToDB,
+    deleteCurrentUser,
+    signUpUser,
     getUser,
 
     loginAuth,
     logoutAuth,
+
+    getUserRooms,
   };
 };
 
-export default function UsersContextProvider({ children }) {
+export default function UsersContextProvider({children}) {
   const value = UsersContextData();
   return (
     <UsersContext.Provider value={value}>{children}</UsersContext.Provider>
   );
 }
-
-// const USER_ADDRESS = "USER_ADDRESS";
-
-// useEffect(() => {
-//   if (currentUser) {
-//     const updateCurrentUser = allUsersData.find(
-//       (user) => user.id == currentUser?.id
-//     );
-//     setCurrentUser(updateCurrentUser);
-//   }
-// }, [allUsersData]);
-
-// useEffect(() => {
-//   const localStorageUser = JSON.parse(localStorage.getItem(USER_ADDRESS));
-//   if (localStorageUser != null) setCurrentUser(localStorageUser);
-// }, []);
-
-// useEffect(() => {
-//   if (currentUser != null)
-//     localStorage.setItem(USER_ADDRESS, JSON.stringify(currentUser));
-// }, [currentUser]);
