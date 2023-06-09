@@ -161,12 +161,6 @@ function SignUpPage() {
           keysWithErrors={keysWithErrors}
           pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
         />
-        {/* <SignUpInput
-          formDataKey={"age"}
-          placeholder={"Age"}
-          typeOfInput="number"
-          keysWithErrors={keysWithErrors}
-        /> */}
         <button className="m-6 w-[80%] bg-[#1C2B2D] px-4 py-2 text-2xl text-white hover:bg-[#1C2B2Dcc]">
           Sign-Up
         </button>{" "}
@@ -178,18 +172,6 @@ function SignUpPage() {
       >
         RETURN TO LOGIN
       </button>
-      {/* {isEmailVerify && !isCodeVerify && (
-        <form onSubmit={checkEmailVerify}>
-          <div>
-            {" "}
-            It might take a couple of moments for the code to appear in your
-            mail...{" "}
-          </div>
-          <input placeholder="Code For Email" type={"number"} />
-          <button type="submit"> Verify </button>
-        </form>
-      )}
-      {isCodeVerify && <div> Your new user request has been sent </div>} */}
     </div>
   );
 }

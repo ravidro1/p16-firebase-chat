@@ -3,8 +3,11 @@ import useUsersContext from "../../context/useUsersContext";
 import { useState } from "react";
 import { useEffect } from "react";
 import { collection, getDocs, where } from "firebase/firestore";
-import { dataBase } from "../../Firebase/FirebaseConfig";
+import { dataBase, storage } from "../../Firebase/FirebaseConfig";
 import SettingsField from "./SettingsField";
+import { uploadBytesResumable } from "firebase/storage";
+import PictureUploadField from "./PictureUploadField";
+import PasswordField from "./PasswordField";
 
 export default function Settings({ setIsSettingsOpen }) {
   const { deleteUserFromDB, currentUser, getUser, logoutAuth } =
@@ -23,8 +26,8 @@ export default function Settings({ setIsSettingsOpen }) {
   // console.log(currentUserData);
 
   return (
-    <div className="w-full h-full flex justify-center items-center">
-      <section className="w-[85%] h-[85%] border">
+    <div className="w-full h-full flex flex-col justify-center items-center">
+      <section className="w-[100%] h-[80%] flex flex-wrap justify-around">
         <SettingsField
           type={"email"}
           currentUser={currentUser}
@@ -59,17 +62,29 @@ export default function Settings({ setIsSettingsOpen }) {
           fieldKey={"phoneNumber"}
           pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
         />
+        <PictureUploadField />
+
+        <PasswordField />
+      </section>
+
+      <section className="w-full h-[20%] flex justify-around items-center">
         <button
           onClick={() => setIsSettingsOpen((prev) => !prev)}
-          className="bg-black p-4 rounded-lg"
+          className="bg-[#1C2B2D] p-4 rounded-lg h-[60px] min-w-fit w-[200px]"
         >
           Go Back To Chat
         </button>
         <button
-          onClick={() => deleteUserFromDB(currentUser)}
-          className="bg-black p-4 rounded-lg"
+          onClick={() => logoutAuth()}
+          className="bg-[#1C2B2D] p-4 rounded-lg h-[60px] min-w-fit w-[200px]"
         >
-          delete{" "}
+          Logout
+        </button>
+        <button
+          onClick={() => deleteUserFromDB(currentUser)}
+          className="bg-[#d81212] p-4 rounded-lg h-[60px] min-w-fit w-[200px]"
+        >
+          Delete Account
         </button>
       </section>
     </div>

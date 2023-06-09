@@ -34,7 +34,8 @@ export default function SettingsField({
       const arrayOfUsers = [];
 
       querySnapshot.forEach((user) => {
-        if (user.data().uid != currentUser.uid) arrayOfUsers.push(user.data());
+        // if (user.data().uid != currentUser.uid)
+        arrayOfUsers.push(user.data());
       });
       console.log(arrayOfUsers);
       if (arrayOfUsers.length > 0) return false;
@@ -72,10 +73,8 @@ export default function SettingsField({
       await updateDoc(doc(dataBase, "users", currentUser.uid), {
         [fieldKey]: inputValue,
       });
-      // if (fieldKey == "email") await updateCurrentUser();
       if (fieldKey == "email") await updateEmail(currentUser, inputValue);
       setInputValue("");
-      // if (fieldKey == "email") await updateEmail(auth.currentUser, inputValue);
       console.log(111);
     } catch (error) {
       console.log(222);
@@ -96,15 +95,15 @@ export default function SettingsField({
   }, [inputValue, errorMessage]);
 
   return (
-    <div className="w-[400px] h-[60px] flex flex-col">
+    <div className="w-[400px] max-w-[90%] flex flex-col m-5">
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="flex h-[80%] relative"
+        className="flex h-[60px] relative"
       >
         <input
           ref={inputRef}
           pattern={pattern}
-          className="w-[75%]  rounded-l-lg h-[100%] p-4"
+          className="w-[70%]  rounded-l-lg h-[100%] p-4"
           placeholder={placeholder}
           value={inputValue}
           onChange={(e) => {
@@ -116,7 +115,7 @@ export default function SettingsField({
         />
         <button
           onClick={updateField}
-          className="w-[25%] h-[100%] rounded-r-lg bg-black p-2"
+          className="w-[30%] h-[100%] rounded-r-lg bg-[#1C2B2D] p-2"
         >
           {" "}
           Update Field{" "}
