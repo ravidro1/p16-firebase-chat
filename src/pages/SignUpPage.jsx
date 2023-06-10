@@ -1,17 +1,19 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {useState} from "react";
 // import emailjs from "@emailjs/browser";
 import SignUpInput from "../components/LoginAndSignUp/SignUpInput";
 
 import useUsersContext from "../context/useUsersContext";
-import {getDownloadURL, ref} from "firebase/storage";
+import useChatContext from "../context/useChatContext";
+
 import {collection, getDocs, query, where} from "firebase/firestore";
-import {dataBase, storage} from "../firebase/FirebaseConfig";
+import {dataBase} from "../firebase/FirebaseConfig";
 import {useNavigate} from "react-router-dom";
 
 function SignUpPage() {
   const navigate = useNavigate();
   const {signUpUser} = useUsersContext();
+  const {getImageByName} = useChatContext();
 
   const [keysWithErrors, setKeysWithErrors] = useState({});
   const [isServerErrorMessageShown, setIsServerErrorMessageShown] =
@@ -62,9 +64,6 @@ function SignUpPage() {
     if (Object.keys(tempKeysWithErrors).length <= 0) {
       setKeysWithErrors({});
       const tempUserData = {
-        isAdmin: false,
-        logged_in_already: false,
-        birthday: null,
         profilePic: null,
         accountCreationDate: new Date().getTime(),
       };
@@ -74,9 +73,10 @@ function SignUpPage() {
       });
 
       try {
-        const defaultProfilePictureURL = await getDownloadURL(
-          ref(storage, "profile-pic.png")
+        const defaultProfilePictureURL = await getImageByName(
+          "profile-pic.png"
         );
+
         tempUserData.profilePic = defaultProfilePictureURL;
 
         await signUpUser(tempUserData);

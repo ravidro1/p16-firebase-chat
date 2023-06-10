@@ -1,63 +1,42 @@
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import React from "react";
-import { useState } from "react";
-import { dataBase, storage } from "../../Firebase/FirebaseConfig";
+import React, {useRef, useState} from "react";
+import useChatContext from "../../context/useChatContext";
 import useUsersContext from "../../context/useUsersContext";
-import { useRef } from "react";
-import { doc, updateDoc } from "firebase/firestore";
 
 export default function PictureUploadField() {
   const [file, setFile] = useState(null);
 
   const [progress, setProgress] = useState(null);
 
-  const { currentUser } = useUsersContext();
+  const {uploadImageToStorage} = useChatContext();
+  const {currentUser, updateUser} = useUsersContext();
+
   const fileInputRef = useRef();
 
   const updateProfilePicture = async () => {
-    if (!file) return;
+    try {
+      if (!file) return;
 
-    const storageRef = ref(storage, currentUser.uid);
+      const imageUrl = await uploadImageToStorage(
+        file,
+        currentUser.uid,
+        setProgress
+      );
 
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setProgress(progress);
-        switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
-            break;
-          case "running":
-            console.log("Upload is running");
-            break;
-        }
-      },
-      (error) => {
-        console.log(error);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
-          setProgress(null);
-
-          updateDoc(doc(dataBase, "users", currentUser.uid), {
-            profilePic: downloadURL,
-          })
-            .then(() => clearInput())
-            .catch((error) => console.log(error));
-        });
-      }
-    );
+      await updateUser(currentUser.uid, {
+        profilePic: imageUrl,
+      });
+      clearInput();
+    } catch (error) {
+      error.log(error);
+    }
   };
 
   const clearInput = () => {
     if (fileInputRef && fileInputRef.current) fileInputRef.current.value = null;
     setFile(null);
   };
+
+  console.log(progress);
 
   return (
     <div className="w-[400px] flex xl:h-[60px] h-[45px] xl:m-5 m-3">

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import ContactItem from "./ContactItem";
-import {doc, getDoc, setDoc} from "firebase/firestore";
-import {dataBase} from "../../Firebase/FirebaseConfig";
+
 import useUsersContext from "../../context/useUsersContext";
 import useChatContext from "../../context/useChatContext";
 
@@ -22,7 +21,7 @@ export default function ContactList({searchValue}) {
     if (searchValue) handleSearch();
     else
       async () => {
-        setContactArray(getUserRooms());
+        setContactArray(await getUserRooms());
       };
   }, [searchValue, allUsersData]);
 
@@ -77,29 +76,11 @@ export default function ContactList({searchValue}) {
     }
   };
 
-  const getRoomOfCombineUsers = async (user) => {
-    const combinedID =
-      currentUser.uid > user.uid
-        ? currentUser.uid + user.uid
-        : user.uid + currentUser.uid;
-
-    try {
-      return await getChat(combinedID);
-    } catch (error) {
-      return null;
-    }
-  };
-
   return (
     <div className="w-full h-full overflow-auto">
       {contactArray.map((user, index) => {
         return (
-          <ContactItem
-            getRoomOfCombineUsers={getRoomOfCombineUsers}
-            selectHandle={selectHandle}
-            key={index}
-            user={user}
-          />
+          <ContactItem selectHandle={selectHandle} key={index} user={user} />
         );
       })}
     </div>

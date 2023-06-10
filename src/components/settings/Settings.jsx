@@ -3,8 +3,6 @@ import useUsersContext from "../../context/useUsersContext";
 import SettingsField from "./SettingsField";
 import PictureUploadField from "./PictureUploadField";
 import PasswordField from "./PasswordField";
-import {storage} from "../../Firebase/FirebaseConfig";
-import {deleteObject, ref} from "firebase/storage";
 
 export default function Settings({setIsSettingsOpen}) {
   const {deleteCurrentUser, currentUser, logoutAuth} = useUsersContext();
@@ -47,18 +45,6 @@ export default function Settings({setIsSettingsOpen}) {
         />
         <PictureUploadField />
       </section>
-      <button
-        onClick={() => {
-          (async () => {
-            const imageRef = ref(storage, currentUser.uid);
-            await deleteObject(imageRef)
-              .then(() => console.log("success"))
-              .catch((error) => console.error(error));
-          })();
-        }}
-      >
-        sadadasdasdasd
-      </button>
 
       <section className="w-full h-[20%] flex justify-around items-center">
         <button
