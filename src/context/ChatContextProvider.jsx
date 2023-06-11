@@ -3,7 +3,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import React, { createContext } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { dataBase, storage } from "../Firebase/FirebaseConfig";
+import { dataBase, storage } from "../firebase/config";
 
 export const ChatContext = createContext();
 

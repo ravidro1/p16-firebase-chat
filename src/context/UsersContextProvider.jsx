@@ -1,14 +1,11 @@
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { createContext } from "react";
-import FirebaseUsersHandler from "../Firebase/FirebaseUsersHandler";
+import React, { useState, createContext, useEffect } from "react";
+
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { auth, dataBase } from "../Firebase/FirebaseConfig";
+import { auth, dataBase } from "../firebase/config";
 import {
   collection,
   doc,
@@ -17,6 +14,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import FirebaseUsersHandler from "../firebase/FirebaseUsersHandler";
 
 export const UsersContext = createContext();
 

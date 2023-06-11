@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useUsersContext from "../../context/useUsersContext";
 import useChatContext from "../../context/useChatContext";
-import { dataBase } from "../../Firebase/FirebaseConfig";
+import { dataBase } from "../../firebase/config";
 import { doc, onSnapshot } from "firebase/firestore";
 
 export default function ContactItem({ user, selectHandle }) {
