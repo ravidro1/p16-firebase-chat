@@ -1,11 +1,11 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useState } from "react";
 import useUsersContext from "../../context/useUsersContext";
 // import emailjs from "@emailjs/browser";
 
-function ForgotMyPassword(props) {
-  const setEmailSentDisplay = props.setEmailSentDisplay;
-  const setIsForgotMyPasswordClicked = props.setIsForgotMyPasswordClicked;
-
+function ForgotMyPassword({
+  setEmailSentDisplay,
+  setIsForgotMyPasswordClicked,
+}) {
   const [emailInput, setEmailInput] = useState("");
 
   const { allUsersData } = useUsersContext();
@@ -13,46 +13,46 @@ function ForgotMyPassword(props) {
   const sendPasswordEmail = (e) => {
     e.preventDefault();
 
-    allUsersData.forEach((user) => {
-      const lowerEmailInput = emailInput.toLowerCase();
-      const lowerUserEmail = user.email.toLowerCase();
+    // allUsersData.forEach((user) => {
+    //   const lowerEmailInput = emailInput.toLowerCase();
+    //   const lowerUserEmail = user.email.toLowerCase();
 
-      if (lowerEmailInput === lowerUserEmail) {
-        const forgottenUser = {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          username: user.username,
-          password: user.password,
-          email: user.email,
-        };
-        emailjs
-          .send(
-            "service_phncgki",
-            "template_pki2s0s",
-            forgottenUser,
-            "G6FfxIuzzIWh-iY_u"
-          )
-          .then(
-            (result) => {
-              console.log(
-                "Your username and password have been sent to your email."
-              );
-              setEmailSentDisplay(
-                "Your username and password have been sent to your email."
-              );
-            },
-            (error) => {
-              console.log(error.text);
-              setEmailSentDisplay(
-                "Error sending username and password to your email. Try again later."
-              );
-            }
-          );
-      } else {
-        // setEmailSentDisplay("Entered email did not match any user's saved email.")
-      }
-    });
-    setIsForgotMyPasswordClicked(false);
+    //   if (lowerEmailInput === lowerUserEmail) {
+    //     const forgottenUser = {
+    //       firstName: user.firstName,
+    //       lastName: user.lastName,
+    //       username: user.username,
+    //       password: user.password,
+    //       email: user.email,
+    //     };
+    //     emailjs
+    //       .send(
+    //         "service_phncgki",
+    //         "template_pki2s0s",
+    //         forgottenUser,
+    //         "G6FfxIuzzIWh-iY_u"
+    //       )
+    //       .then(
+    //         (result) => {
+    //           console.log(
+    //             "Your username and password have been sent to your email."
+    //           );
+    //           setEmailSentDisplay(
+    //             "Your username and password have been sent to your email."
+    //           );
+    //         },
+    //         (error) => {
+    //           console.log(error.text);
+    //           setEmailSentDisplay(
+    //             "Error sending username and password to your email. Try again later."
+    //           );
+    //         }
+    //       );
+    //   } else {
+    //     // setEmailSentDisplay("Entered email did not match any user's saved email.")
+    //   }
+    // });
+    // setIsForgotMyPasswordClicked(false);
   };
 
   return (
