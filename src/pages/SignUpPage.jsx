@@ -24,6 +24,8 @@ function SignUpPage() {
     const tempKeysWithErrors = {};
 
     for (let entry of data.entries()) {
+      if (entry[0] == "email")
+        formatData[entry[0]] = String(entry[1]).trim().toLowerCase();
       formatData[entry[0]] = String(entry[1]).trim();
     }
 

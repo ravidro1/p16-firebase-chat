@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import useUsersContext from "../../context/useUsersContext";
-// import emailjs from "@emailjs/browser";
+import emailjs from "@emailjs/browser";
+import { dataBase } from "../../firebase/config";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 function ForgotMyPassword({
   setEmailSentDisplay,
@@ -8,51 +9,58 @@ function ForgotMyPassword({
 }) {
   const [emailInput, setEmailInput] = useState("");
 
-  const { allUsersData } = useUsersContext();
+  const sendPasswordEmail = async (e) => {
+    try {
+      e.preventDefault();
 
-  const sendPasswordEmail = (e) => {
-    e.preventDefault();
+      console.log("click");
+      const lowerEmailInput = emailInput.toLowerCase();
 
-    // allUsersData.forEach((user) => {
-    //   const lowerEmailInput = emailInput.toLowerCase();
-    //   const lowerUserEmail = user.email.toLowerCase();
+      const res = query(
+        collection(dataBase, "users"),
+        where("email", "==", lowerEmailInput)
+      );
 
-    //   if (lowerEmailInput === lowerUserEmail) {
-    //     const forgottenUser = {
-    //       firstName: user.firstName,
-    //       lastName: user.lastName,
-    //       username: user.username,
-    //       password: user.password,
-    //       email: user.email,
-    //     };
-    //     emailjs
-    //       .send(
-    //         "service_phncgki",
-    //         "template_pki2s0s",
-    //         forgottenUser,
-    //         "G6FfxIuzzIWh-iY_u"
-    //       )
-    //       .then(
-    //         (result) => {
-    //           console.log(
-    //             "Your username and password have been sent to your email."
-    //           );
-    //           setEmailSentDisplay(
-    //             "Your username and password have been sent to your email."
-    //           );
-    //         },
-    //         (error) => {
-    //           console.log(error.text);
-    //           setEmailSentDisplay(
-    //             "Error sending username and password to your email. Try again later."
-    //           );
-    //         }
-    //       );
-    //   } else {
-    //     // setEmailSentDisplay("Entered email did not match any user's saved email.")
-    //   }
-    // });
-    // setIsForgotMyPasswordClicked(false);
+      const querySnapshot = await getDocs(res);
+
+      let user = null;
+
+      querySnapshot.forEach((doc) => {
+        user = doc.data();
+      });
+
+      console.log(user);
+
+      if (user) {
+        await emailjs.send(
+          import.meta.env.VITE_EMAIL_JS_SERVICE_ID,
+          import.meta.env.VITE_EMAIL_JS_TEMPLATE_ID,
+          {
+            subject: "Forgot Password",
+            message: "Your Password Is: " + user.password,
+            toEmail: lowerEmailInput,
+          },
+          import.meta.env.VITE_EMAIL_JS_PUBLIC_KEY
+        );
+
+        setEmailSentDisplay({
+          text: "Your Password Have Been Sent To Your Email",
+          status: "success",
+        });
+      } else {
+        setEmailSentDisplay({
+          text: "Error Sending Password To Your Email. Try Again Later",
+          status: "error",
+        });
+      }
+    } catch (error) {
+      setEmailSentDisplay({
+        text: "Invalid Email",
+        status: "error",
+      });
+    } finally {
+      setIsForgotMyPasswordClicked(false);
+    }
   };
 
   return (

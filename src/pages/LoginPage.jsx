@@ -32,7 +32,7 @@ function LoginPage() {
     }
   };
 
-  const [emailSentDisplay, setEmailSentDisplay] = useState("");
+  const [emailSentDisplay, setEmailSentDisplay] = useState(null);
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-around">
@@ -93,7 +93,13 @@ function LoginPage() {
               setEmailSentDisplay={setEmailSentDisplay}
             />
           )}
-          <h2>{emailSentDisplay}</h2>
+          <h2
+            style={{
+              color: emailSentDisplay?.status == "success" ? "green" : "red",
+            }}
+          >
+            {emailSentDisplay?.text}
+          </h2>
         </section>
 
         <button
