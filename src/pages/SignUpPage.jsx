@@ -1,45 +1,21 @@
 import React from "react";
-import {useState} from "react";
+import { useState } from "react";
 // import emailjs from "@emailjs/browser";
 import SignUpInput from "../components/LoginAndSignUp/SignUpInput";
 
 import useUsersContext from "../context/useUsersContext";
 import useChatContext from "../context/useChatContext";
 
-import {collection, getDocs, query, where} from "firebase/firestore";
-import {dataBase} from "../firebase/FirebaseConfig";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function SignUpPage() {
   const navigate = useNavigate();
-  const {signUpUser} = useUsersContext();
-  const {getImageByName} = useChatContext();
+  const { signUpUser, checkUniqueField } = useUsersContext();
+  const { getImageByName } = useChatContext();
 
   const [keysWithErrors, setKeysWithErrors] = useState({});
   const [isServerErrorMessageShown, setIsServerErrorMessageShown] =
     useState(false);
-
-  const checkUniqueField = async (formatData, key) => {
-    const field = query(
-      collection(dataBase, "users"),
-
-      where(key, "==", formatData[key])
-    );
-
-    try {
-      const querySnapshot = await getDocs(field);
-      const arrayOfUsers = [];
-
-      querySnapshot.forEach((user) => {
-        arrayOfUsers.push(user.data());
-      });
-      if (arrayOfUsers.length > 0) return key;
-      return null;
-    } catch (error) {
-      console.log(error);
-      return null;
-    }
-  };
 
   const register = async (event) => {
     event.preventDefault();
@@ -51,14 +27,23 @@ function SignUpPage() {
       formatData[entry[0]] = String(entry[1]).trim();
     }
 
-    const emailField = await checkUniqueField(formatData, "email");
-    const phoneNumberField = await checkUniqueField(formatData, "phoneNumber");
-    const nickNameField = await checkUniqueField(formatData, "nickName");
+    const isEmailFieldUnique = await checkUniqueField(
+      formatData["email"],
+      "email"
+    );
+    const isPhoneNumberFieldUnique = await checkUniqueField(
+      formatData["phoneNumber"],
+      "phoneNumber"
+    );
+    const isNickNameFieldUnique = await checkUniqueField(
+      formatData["nickName"],
+      "nickName"
+    );
 
-    if (emailField) tempKeysWithErrors["email"] = `email already taken`;
-    if (phoneNumberField)
+    if (!isEmailFieldUnique) tempKeysWithErrors["email"] = `email already taken`;
+    if (!isPhoneNumberFieldUnique)
       tempKeysWithErrors["phoneNumber"] = `phoneNumber already taken`;
-    if (nickNameField)
+    if (!isNickNameFieldUnique)
       tempKeysWithErrors["nickName"] = `nickName already taken`;
 
     if (Object.keys(tempKeysWithErrors).length <= 0) {
@@ -80,7 +65,9 @@ function SignUpPage() {
         tempUserData.profilePic = defaultProfilePictureURL;
 
         await signUpUser(tempUserData);
-        document.signup_form.reset();
+
+        event.target.reset();
+
         setPassword("");
 
         navigate("/");
@@ -100,7 +87,8 @@ function SignUpPage() {
       <h1 className="m-2 text-center text-6xl text-white">SIGN UP</h1>
 
       <form
-        name="signup_form"
+        name="signUp_form"
+        id="signUp_form"
         onChange={() => {
           setKeysWithErrors({});
           setIsServerErrorMessageShown(false);
@@ -138,7 +126,7 @@ function SignUpPage() {
           placeholder={"Nick Name"}
           typeOfInput="text"
           keysWithErrors={keysWithErrors}
-          pattern={"^[A-Za-z]"}
+          pattern={"^[A-Za-z][A-za-z0-9]*"}
         />
         <SignUpInput
           formDataKey={"firstName"}

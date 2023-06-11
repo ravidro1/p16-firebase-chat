@@ -1,9 +1,9 @@
-import {doc, getDoc, onSnapshot, setDoc, updateDoc} from "firebase/firestore";
-import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
-import React, {createContext} from "react";
-import {useEffect} from "react";
-import {useState} from "react";
-import {dataBase, storage} from "../Firebase/FirebaseConfig";
+import { doc, getDoc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import React, { createContext } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
+import { dataBase, storage } from "../Firebase/FirebaseConfig";
 
 export const ChatContext = createContext();
 
@@ -33,7 +33,7 @@ const ChatContextData = () => {
   };
 
   const getChat = async (chat_id) => {
-    return (await getDoc(doc(dataBase, "chatRoom", chat_id))).data();
+    return await getDoc(doc(dataBase, "chatRoom", chat_id));
   };
 
   const createChat = async (chat_id, fields) => {
@@ -98,7 +98,7 @@ const ChatContextData = () => {
   };
 };
 
-export default function ChatContextProvider({children}) {
+export default function ChatContextProvider({ children }) {
   const value = ChatContextData();
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;

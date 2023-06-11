@@ -1,14 +1,9 @@
-import React from "react";
-import {useEffect} from "react";
-import {useRef} from "react";
-import {useState} from "react";
+import React, { useRef, useState, useEffect } from "react";
 import useUsersContext from "../../context/useUsersContext";
-import {auth, dataBase} from "../../Firebase/FirebaseConfig";
-import {doc, updateDoc} from "firebase/firestore";
-import {updatePassword} from "firebase/auth";
+import { updatePassword } from "firebase/auth";
 
 export default function PasswordField() {
-  const {currentUser} = useUsersContext();
+  const { currentUser, updateUser } = useUsersContext();
 
   const [passwordValue, setPasswordValue] = useState("");
   const [verifyPasswordValue, setVerifyPasswordValue] = useState("");
@@ -19,14 +14,15 @@ export default function PasswordField() {
     if (!passwordValue || !verifyPasswordValue) return;
 
     try {
-      await updateDoc(doc(dataBase, "users", currentUser.uid), {
+      await updateUser(currentUser.uid, {
         password: passwordValue,
       });
-      await updatePassword(auth.currentUser, passwordValue);
 
+      await updatePassword(currentUser, passwordValue);
+
+      console.log("new password:" + passwordValue);
       setPasswordValue("");
       setVerifyPasswordValue("");
-      console.log(111);
     } catch (error) {
       setErrorMessage(`something went wrong`);
     }

@@ -1,15 +1,15 @@
 import React from "react";
 import ChatHeader from "./ChatHeader";
-import {useEffect} from "react";
-import {useState} from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import useUsersContext from "../../context/useUsersContext";
 import useChatContext from "../../context/useChatContext";
 import SendMessage from "./SendMessage";
 import ChatMessagesWindow from "./ChatMessagesWindow";
 
-export default function ChatRoom({setIsSettingsOpen}) {
-  const {currentUser, getUser} = useUsersContext();
-  const {currentChatData} = useChatContext();
+export default function ChatRoom({ setIsSettingsOpen }) {
+  const { currentUser, getUser } = useUsersContext();
+  const { currentChatData } = useChatContext();
 
   const [otherUserData, setOtherUserData] = useState(null);
 
@@ -28,25 +28,22 @@ export default function ChatRoom({setIsSettingsOpen}) {
   };
 
   return (
-    <div className="w-full h-full">
-      <ChatHeader
-        setIsSettingsOpen={setIsSettingsOpen}
-        otherUserData={otherUserData}
-      />
-      <div className="w-full h-[90%] flex justify-center items-center">
-        {currentChatData ? (
-          <div className="w-full h-full">
-            <section className="w-full h-[90%]">
-              <ChatMessagesWindow />
-            </section>
-            <section className="w-full h-[10%] ">
-              <SendMessage />
-            </section>{" "}
-          </div>
-        ) : (
-          <h1 className="text-white text-3xl"> selected room : null</h1>
-        )}
-      </div>
+    <div className="w-full h-full flex justify-center items-center  bg-[#DDE6ED]">
+      {currentChatData ? (
+        <div className="w-full h-full">
+          <section className="w-full h-[10%] bg-[#526D82]">
+            <ChatHeader otherUserData={otherUserData} />
+          </section>
+          <section className="w-full h-[80%]">
+            <ChatMessagesWindow />
+          </section>
+          <section className="w-full h-[10%] ">
+            <SendMessage />
+          </section>{" "}
+        </div>
+      ) : (
+        <h1 className="text-white text-3xl"> selected room : null</h1>
+      )}
     </div>
   );
 }

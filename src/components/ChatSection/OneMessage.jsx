@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function OneMessage({ message, isSenderCurrentUser }) {
-  console.log(message);
+  // console.log(message);
   const getFormatTime = (messageTime) => {
     const dateObj = new Date(messageTime);
     const hours = String(dateObj.getHours());

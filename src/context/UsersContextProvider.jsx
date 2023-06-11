@@ -1,19 +1,20 @@
 import React from "react";
-import {useEffect} from "react";
-import {useState} from "react";
-import {createContext} from "react";
+import { useEffect } from "react";
+import { useState } from "react";
+import { createContext } from "react";
 import FirebaseUsersHandler from "../Firebase/FirebaseUsersHandler";
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import {auth} from "../Firebase/FirebaseConfig";
+import { auth, dataBase } from "../Firebase/FirebaseConfig";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 export const UsersContext = createContext();
 
 const UsersContextData = () => {
-  const {updateUser, allUsersData, deleteCurrentUser, signUpUser, getUser} =
+  const { updateUser, allUsersData, deleteCurrentUser, signUpUser, getUser } =
     FirebaseUsersHandler();
 
   const [currentUser, setCurrentUser] = useState(null);
@@ -30,9 +31,11 @@ const UsersContextData = () => {
   }, []);
 
   useEffect(() => {
-    async () => {
-      setCurrentUserData(await getUser(currentUser.uid));
-    };
+    if (currentUser) {
+      (async () => {
+        setCurrentUserData(await getUser(currentUser.uid));
+      })();
+    }
   }, [currentUser]);
 
   const loginAuth = (email, password) => {
@@ -54,6 +57,27 @@ const UsersContextData = () => {
     return arrayOfUsers;
   };
 
+  const checkUniqueField = async (key, inputValue) => {
+    const field = query(
+      collection(dataBase, "users"),
+      where(key, "==", inputValue)
+    );
+
+    try {
+      const querySnapshot = await getDocs(field);
+      const arrayOfUsers = [];
+
+      querySnapshot.forEach((user) => {
+        arrayOfUsers.push(user.data());
+      });
+      if (arrayOfUsers.length > 0) return false;
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
   return {
     currentUser,
     currentUserData,
@@ -68,10 +92,11 @@ const UsersContextData = () => {
     logoutAuth,
 
     getUserRooms,
+    checkUniqueField,
   };
 };
 
-export default function UsersContextProvider({children}) {
+export default function UsersContextProvider({ children }) {
   const value = UsersContextData();
   return (
     <UsersContext.Provider value={value}>{children}</UsersContext.Provider>

@@ -1,18 +1,9 @@
 import React, { useState } from "react";
-import { auth, dataBase } from "../../Firebase/FirebaseConfig";
-import {
-  and,
-  collection,
-  doc,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
 
 import { updateEmail } from "firebase/auth";
 import { useRef } from "react";
 import { useEffect } from "react";
+import useUsersContext from "../../context/useUsersContext";
 
 export default function SettingsField({
   fieldKey,
@@ -21,33 +12,13 @@ export default function SettingsField({
   pattern = null,
   currentUser,
 }) {
+  const { checkUniqueField, updateUser } = useUsersContext();
+
   const [inputValue, setInputValue] = useState("");
-
-  const checkUniqueField = async (key, inputValue) => {
-    const field = query(
-      collection(dataBase, "users"),
-      where(key, "==", inputValue)
-    );
-
-    try {
-      const querySnapshot = await getDocs(field);
-      const arrayOfUsers = [];
-
-      querySnapshot.forEach((user) => {
-        // if (user.data().uid != currentUser.uid)
-        arrayOfUsers.push(user.data());
-      });
-      console.log(arrayOfUsers);
-      if (arrayOfUsers.length > 0) return false;
-      return true;
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
-  };
 
   const [errorMessage, setErrorMessage] = useState();
 
+  checkUniqueField;
   const updateField = async () => {
     if (!inputValue) return;
     let fieldUnique = false;
@@ -70,14 +41,16 @@ export default function SettingsField({
     console.log(5);
 
     try {
-      await updateDoc(doc(dataBase, "users", currentUser.uid), {
+      await updateUser(currentUser.uid, {
         [fieldKey]: inputValue,
       });
+
       if (fieldKey == "email") await updateEmail(currentUser, inputValue);
       setInputValue("");
-      console.log(111);
+
+      console.log("field changed");
     } catch (error) {
-      console.log(222);
+      console.log(error);
       setErrorMessage(`something went wrong`);
     }
   };

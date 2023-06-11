@@ -1,22 +1,45 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import useUsersContext from "../../context/useUsersContext";
-import useChatContext from "../../context/useChatContext";
+import { dataBase } from "../../Firebase/FirebaseConfig";
+import { doc, onSnapshot } from "firebase/firestore";
+import { useRef } from "react";
 
-export default function ContactItem({user, selectHandle}) {
+export default function ContactItem({ user, selectHandle }) {
+  const { getUser, currentUser } = useUsersContext();
+
+  const [thisChat, setThisChat] = useState(null);
   const [lastRoomMessage, setLastRoomMessage] = useState(null);
 
-  const {getUser} = useUsersContext();
-  const {getChat} = useChatContext();
+  useEffect(() => {
+    thisChat && getLastRoomMessage();
+  }, [thisChat]);
 
   useEffect(() => {
-    getLastRoomMessage();
+    const combinedID =
+      currentUser.uid > user.uid
+        ? currentUser.uid + user.uid
+        : user.uid + currentUser.uid;
+
+    let unsub = () => null;
+    unsub = onSnapshot(doc(dataBase, "chatRoom", combinedID), (doc) => {
+      setThisChat(doc.data());
+    });
+
+    return () => {
+      unsub();
+    };
   }, [user]);
 
   const getLastRoomMessage = async () => {
-    const roomMessages = (await getRoomOfCombineUsers(user)).messages;
-    const lastMessage = roomMessages.at(-1);
-    lastMessage.user = await getUser(lastMessage.user_id);
-    setLastRoomMessage(lastMessage);
+    try {
+      const roomMessages = thisChat.messages;
+      const lastMessage = roomMessages.at(-1);
+      if (lastMessage?.user_id)
+        lastMessage.user = await getUser(lastMessage?.user_id);
+      setLastRoomMessage(lastMessage ? lastMessage : null);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const getFormatTime = () => {
@@ -40,36 +63,53 @@ export default function ContactItem({user, selectHandle}) {
     return time;
   };
 
-  const getRoomOfCombineUsers = async (user) => {
-    const combinedID =
-      currentUser.uid > user.uid
-        ? currentUser.uid + user.uid
-        : user.uid + currentUser.uid;
+  // const itemRef = useRef();
 
-    try {
-      return await getChat(combinedID);
-    } catch (error) {
-      return null;
-    }
-  };
+  // const getAttributeFromRef = (ref, attribute) => {
+  //   if (ref && ref?.current) {
+  //     return ref?.current[attribute];
+  //   }
+  //   return -1;
+  // };
 
   return (
     <button
+      // ref={itemRef}
       onClick={() => selectHandle(user)}
-      className="w-full h-[12.5%] bg-black p-2 flex justify-around items-center"
+      className="border-t w-full h-[12.5%] bg-[#7B8FA1] p-2 flex justify-between items-center"
     >
-      <img
-        className="h-full aspect-square rounded-full"
-        src={user.profilePic}
-        alt=""
-      />
-      <h1 className="text-xl mx-8">{user.nickName}</h1>
-      <div className="h-full flex flex-col justify-center items-center">
-        <p>
-          {lastRoomMessage?.user?.nickName}:{lastRoomMessage?.content}
-        </p>
-        <p>{getFormatTime(lastRoomMessage)}</p>
-      </div>
+      <section className="h-full w-[20%] flex justify-center items-center">
+        <img
+          className="h-full aspect-square rounded-full"
+          src={user.profilePic}
+          alt=""
+        />
+      </section>
+      <section className="h-full w-[30%] flex justify-start items-center">
+        <h1 className="overflow-hidden overflow-ellipsis whitespace-nowrap text-xl mx-8 m-0">
+          {user.nickName}
+        </h1>
+      </section>
+      {/* className="" */}
+      <section className="h-full w-[50%] flex flex-col justify-center items-center">
+        {lastRoomMessage ? (
+          <div className="w-full h-full flex flex-col justify-between">
+            <p className="w-full overflow-hidden overflow-ellipsis whitespace-nowrap m-0 text-start">
+              <strong> {lastRoomMessage?.user?.nickName} </strong> :
+              {lastRoomMessage?.content}
+            </p>
+            <p className="w-full flex justify-end text-end">
+              {lastRoomMessage
+                ? getFormatTime(lastRoomMessage)
+                : "No message has been sent yet"}
+            </p>
+          </div>
+        ) : (
+          <p className="w-full flex justify-start text-start">
+            {"No message has been sent yet"}
+          </p>
+        )}
+      </section>
     </button>
   );
 }

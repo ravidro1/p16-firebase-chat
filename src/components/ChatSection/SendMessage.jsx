@@ -1,12 +1,12 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import useUsersContext from "../../context/useUsersContext";
 import useChatContext from "../../context/useChatContext";
 
 export default function SendMessage({}) {
   const [messageValue, setMessageValue] = useState("");
 
-  const {currentUser} = useUsersContext();
-  const {currentChatData, updateChatData} = useChatContext();
+  const { currentUser } = useUsersContext();
+  const { currentChatData, updateChatData } = useChatContext();
 
   const send = async () => {
     if (!messageValue) return;
@@ -21,7 +21,7 @@ export default function SendMessage({}) {
         },
       ];
 
-      await updateChatData({messages: newLastMessages});
+      await updateChatData({ messages: newLastMessages });
 
       setMessageValue("");
     } catch (error) {
@@ -39,8 +39,7 @@ export default function SendMessage({}) {
         className="w-[80%] h-[100%] p-3"
         type="text"
       />
-      <button onClick={() => send()} className="w-[20%] h-[100%] bg-slate-950">
-        {" "}
+      <button onClick={() => send()} className="w-[20%] h-[100%] bg-[#526D82]">
         SEND{" "}
       </button>
     </form>

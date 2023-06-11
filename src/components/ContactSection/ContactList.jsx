@@ -1,10 +1,14 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import ContactItem from "./ContactItem";
 
 import useUsersContext from "../../context/useUsersContext";
 import useChatContext from "../../context/useChatContext";
 
-export default function ContactList({searchValue}) {
+export default function ContactList({
+  searchValue,
+  setSearchValue,
+  setChatLoading,
+}) {
   const {
     currentUser,
     allUsersData,
@@ -13,16 +17,16 @@ export default function ContactList({searchValue}) {
     updateUser,
     currentUserData,
   } = useUsersContext();
-  const {setSelectedRoomId, getChat, createChat} = useChatContext();
+  const { setSelectedRoomId, getChat, createChat } = useChatContext();
 
   const [contactArray, setContactArray] = useState([]);
 
   useEffect(() => {
     if (searchValue) handleSearch();
     else
-      async () => {
+      (async () => {
         setContactArray(await getUserRooms());
-      };
+      })();
   }, [searchValue, allUsersData]);
 
   const handleSearch = async () => {
@@ -35,6 +39,7 @@ export default function ContactList({searchValue}) {
 
   const selectHandle = async (user) => {
     try {
+      setChatLoading(true);
       const combinedID =
         currentUser.uid > user.uid
           ? currentUser.uid + user.uid
@@ -52,15 +57,23 @@ export default function ContactList({searchValue}) {
 
       const userData = await getUser(user.uid);
 
+      console.log(currentUserData.lastUsersIDs);
+      // if (currentUserData.lastUsersIDs == null)
+      //   currentUserData.lastUsersIDs = [];
+      // if (userData.lastUsersIDs == null) userData.lastUsersIDs = [];
+
       const currentUserFilterLastUsersIDsField =
         currentUserData.lastUsersIDs.filter((user_id) => user_id != user.uid);
 
       const userFilterLastUsersIDsField = userData.lastUsersIDs.filter(
         (user_id) => user_id != currentUser.uid
       );
+      console.log(currentUserFilterLastUsersIDsField);
 
-      currentUserFilterLastUsersIDsField.push(user.uid);
-      userFilterLastUsersIDsField.push(currentUser.uid);
+      currentUserFilterLastUsersIDsField.unshift(user.uid);
+      userFilterLastUsersIDsField.unshift(currentUser.uid);
+
+      console.log(currentUserFilterLastUsersIDsField);
 
       await updateUser(currentUser.uid, {
         lastUsersIDs: currentUserFilterLastUsersIDsField,
@@ -70,9 +83,12 @@ export default function ContactList({searchValue}) {
         lastUsersIDs: userFilterLastUsersIDsField,
       });
 
+      setSearchValue("");
       setSelectedRoomId(combinedID);
     } catch (error) {
       console.log(error);
+    } finally {
+      setChatLoading(false);
     }
   };
 
