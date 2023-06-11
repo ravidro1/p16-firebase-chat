@@ -1,8 +1,7 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ForgotMyPassword from "../Components/LoginAndSignUp/ForgotMyPassword";
 import useUsersContext from "../context/useUsersContext";
+import ForgotMyPassword from "../components/LoginAndSignUp/ForgotMyPassword";
 
 function LoginPage() {
   const navigate = useNavigate();
