@@ -18,6 +18,8 @@ const ChatContextData = () => {
       unsub = onSnapshot(doc(dataBase, "chatRoom", selectedRoomId), (doc) => {
         setCurrentChatData(doc.data());
       });
+    } else {
+      setCurrentChatData(null);
     }
 
     return () => {
@@ -86,6 +88,34 @@ const ChatContextData = () => {
     });
   };
 
+  const formatTime = (timeToFormat) => {
+    const dateObj = new Date(timeToFormat);
+    const hours = String(dateObj.getHours());
+    const minutes = String(dateObj.getMinutes());
+
+    const clock =
+      (hours.length > 1 ? hours : "0" + hours) +
+      ":" +
+      (minutes.length > 1 ? minutes : "0" + minutes);
+
+    const date =
+      dateObj.getDate() +
+      "/" +
+      dateObj.getMonth() +
+      "/" +
+      dateObj.getFullYear();
+
+    return { date, clock };
+  };
+
+  const getFormatMessageTime = (timeToFormat) => {
+    const messageTime = formatTime(timeToFormat);
+    const nowTime = formatTime(new Date().getTime());
+
+    if (messageTime.date == nowTime.date) return messageTime.clock;
+    return messageTime.date + " - " + messageTime.clock;
+  };
+
   return {
     getChat,
     currentChatData,
@@ -95,6 +125,7 @@ const ChatContextData = () => {
     createChat,
     getImageByName,
     uploadImageToStorage,
+    getFormatMessageTime,
   };
 };
 

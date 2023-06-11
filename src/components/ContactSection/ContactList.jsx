@@ -17,7 +17,8 @@ export default function ContactList({
     updateUser,
     currentUserData,
   } = useUsersContext();
-  const { setSelectedRoomId, getChat, createChat } = useChatContext();
+  const { selectedRoomId, setSelectedRoomId, getChat, createChat } =
+    useChatContext();
 
   const [contactArray, setContactArray] = useState([]);
 
@@ -45,8 +46,11 @@ export default function ContactList({
           ? currentUser.uid + user.uid
           : user.uid + currentUser.uid;
 
+      if (selectedRoomId == combinedID) return;
+
       const res = await getChat(combinedID);
 
+      console.log(res.exists());
       if (!res.exists()) {
         await createChat(combinedID, {
           messages: [],
@@ -57,10 +61,9 @@ export default function ContactList({
 
       const userData = await getUser(user.uid);
 
-      console.log(currentUserData.lastUsersIDs);
-      // if (currentUserData.lastUsersIDs == null)
-      //   currentUserData.lastUsersIDs = [];
-      // if (userData.lastUsersIDs == null) userData.lastUsersIDs = [];
+      if (currentUserData.lastUsersIDs == null)
+        currentUserData.lastUsersIDs = [];
+      if (userData.lastUsersIDs == null) userData.lastUsersIDs = [];
 
       const currentUserFilterLastUsersIDsField =
         currentUserData.lastUsersIDs.filter((user_id) => user_id != user.uid);
@@ -68,12 +71,9 @@ export default function ContactList({
       const userFilterLastUsersIDsField = userData.lastUsersIDs.filter(
         (user_id) => user_id != currentUser.uid
       );
-      console.log(currentUserFilterLastUsersIDsField);
 
       currentUserFilterLastUsersIDsField.unshift(user.uid);
       userFilterLastUsersIDsField.unshift(currentUser.uid);
-
-      console.log(currentUserFilterLastUsersIDsField);
 
       await updateUser(currentUser.uid, {
         lastUsersIDs: currentUserFilterLastUsersIDsField,

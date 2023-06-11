@@ -18,7 +18,7 @@ export default function ChatMessagesWindow() {
   }, [currentChatData]);
 
   return (
-    <div className="w-full h-full overflow-auto">
+    <div className="w-full h-full overflow-y-auto overflow-hidden">
       {currentChatData?.messages.map((message, index) => {
         const isSenderCurrentUser = message.user_id == currentUser.uid;
         return (
@@ -30,16 +30,14 @@ export default function ChatMessagesWindow() {
                 : null
             }
             className={
-              "w-full flex " +
+              "w-full flex my-5 px-3 " +
               (isSenderCurrentUser ? "justify-start" : "justify-end")
             }
           >
-            <div className="min-w-[20%] max-w-[45%] w-fit p-3">
-              <OneMessage
-                isSenderCurrentUser={isSenderCurrentUser}
-                message={message}
-              />
-            </div>
+            <OneMessage
+              isSenderCurrentUser={isSenderCurrentUser}
+              message={message}
+            />
           </div>
         );
       })}

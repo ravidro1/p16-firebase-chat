@@ -4,7 +4,7 @@ import ProfileShow from "./ProfileShow";
 
 export default function ContactSection({ setIsSettingsOpen, setChatLoading }) {
   const [searchValue, setSearchValue] = useState("");
-  console.log(searchValue);
+
   return (
     <div className="w-full h-full bg-[#9BA4B5]">
       <section className="w-full h-[10%] bg-[#526D82]">

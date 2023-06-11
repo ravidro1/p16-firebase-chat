@@ -40,7 +40,8 @@ function SignUpPage() {
       "nickName"
     );
 
-    if (!isEmailFieldUnique) tempKeysWithErrors["email"] = `email already taken`;
+    if (!isEmailFieldUnique)
+      tempKeysWithErrors["email"] = `email already taken`;
     if (!isPhoneNumberFieldUnique)
       tempKeysWithErrors["phoneNumber"] = `phoneNumber already taken`;
     if (!isNickNameFieldUnique)
@@ -84,7 +85,9 @@ function SignUpPage() {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
-      <h1 className="m-2 text-center text-6xl text-white">SIGN UP</h1>
+      <h1 className="sm:block hidden m-2 text-center text-6xl text-white">
+        SIGN UP
+      </h1>
 
       <form
         name="signUp_form"
@@ -94,7 +97,7 @@ function SignUpPage() {
           setIsServerErrorMessageShown(false);
         }}
         onSubmit={register}
-        className="flex h-[80%] w-[80%] flex-col items-center justify-around overflow-hidden rounded-lg bg-[#E6D5B8] shadow-2xl sm:w-[60%] lg:w-[40%]"
+        className="flex h-[93%] w-[100%] flex-col items-center justify-around overflow-hidden sm:rounded-lg bg-[#9BA4B5] shadow-2xl sm:w-[60%] lg:w-[40%] overflow-y-auto"
       >
         {isServerErrorMessageShown && (
           <h1 className="text-red-500"> Server Error Try Again </h1>
@@ -114,13 +117,13 @@ function SignUpPage() {
           minLength={8}
           maxLength={20}
         />
-        {/* <SignUpInput
+        <SignUpInput
           formDataKey={"verifyPassword"}
           placeholder={"Verify Password"}
           typeOfInput="password"
           keysWithErrors={keysWithErrors}
           pattern={password}
-        /> */}
+        />
         <SignUpInput
           formDataKey={"nickName"}
           placeholder={"Nick Name"}
@@ -156,7 +159,7 @@ function SignUpPage() {
 
       <button
         onClick={() => navigate("/")}
-        className="m-6 w-[50] bg-[#1C2B2D] px-4 py-2 text-2xl text-white hover:bg-[#1C2B2Dcc] sm:w-[40%] lg:w-[25%]"
+        className="sm:m-6 w-[100%] sm:h-[auto] h-[7%] bg-[#1C2B2D] px-4 py-2 sm:text-2xl text-lg text-white hover:bg-[#1C2B2Dcc] sm:w-[40%] lg:w-[25%]"
       >
         RETURN TO LOGIN
       </button>

@@ -1,13 +1,13 @@
 import React from "react";
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ForgotMyPassword from "../Components/LoginAndSignUp/ForgotMyPassword";
 import useUsersContext from "../context/useUsersContext";
 
 function LoginPage() {
   const navigate = useNavigate();
-  
-  const {loginAuth} = useUsersContext();
+
+  const { loginAuth } = useUsersContext();
 
   const [isWrongCredentials, setIsWrongCredentials] = useState(false);
   const [isForgotMyPasswordClicked, setIsForgotMyPasswordClicked] =
@@ -37,12 +37,12 @@ function LoginPage() {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-around">
-      <h1 className="text-center text-4xl text-white md:text-5xl lg:text-7xl">
+      <h1 className=" text-center text-6xl text-white md:text-6xl lg:text-8xl">
         CHAT
       </h1>
       <h2 className="text-center text-2xl text-white "> LOGIN </h2>
 
-      <div className="flex h-[65%] w-[85%] flex-col items-center justify-evenly overflow-hidden rounded-lg bg-[#E6D5B8] shadow-2xl sm:w-[70%] md:w-[55%] lg:w-[35%]">
+      <div className="flex h-[65%] w-[90%] flex-col items-center justify-evenly overflow-hidden rounded-lg bg-[#9BA4B5] shadow-2xl sm:w-[70%] md:w-[55%] lg:w-[35%]">
         <section className="flex w-full flex-col items-center">
           <form
             onChange={() => setIsWrongCredentials(false)}
@@ -98,7 +98,7 @@ function LoginPage() {
         </section>
 
         <button
-          className=" w-[40%] text-lg text-[#002B5B] hover:text-[#655DBB] hover:underline"
+          className="w-fit text-lg text-[#002B5B] hover:text-[#655DBB] hover:underline"
           onClick={() => navigate("SignUp")}
         >
           Go To Sign-Up

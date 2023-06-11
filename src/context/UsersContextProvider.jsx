@@ -9,7 +9,14 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth, dataBase } from "../Firebase/FirebaseConfig";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 
 export const UsersContext = createContext();
 
@@ -31,11 +38,14 @@ const UsersContextData = () => {
   }, []);
 
   useEffect(() => {
+    let unsub = () => {};
+
     if (currentUser) {
-      (async () => {
-        setCurrentUserData(await getUser(currentUser.uid));
-      })();
+      unsub = onSnapshot(doc(dataBase, "users", currentUser.uid), (doc) => {
+        setCurrentUserData(doc.data());
+      });
     }
+    return () => unsub();
   }, [currentUser]);
 
   const loginAuth = (email, password) => {

@@ -17,7 +17,7 @@ function App() {
   return (
     <ChatContextProvider>
       <UsersContextProvider>
-        <div className="h-[100vh] w-[100vw] bg-[#1F6F8B]">
+        <div className="h-[100vh] w-[100vw] bg-[#1F6F8B] overflow-hidden">
           <Routes>
             <Route element={<LoginAutoNavigate />}>
               <Route path="/" element={<LoginPage />} />

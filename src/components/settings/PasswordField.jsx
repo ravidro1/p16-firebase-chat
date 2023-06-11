@@ -39,10 +39,11 @@ export default function PasswordField() {
   }, [passwordValue, verifyPasswordValue]);
 
   return (
-    <form
-      onSubmit={(e) => e.preventDefault()}
-      className="flex w-[100%] justify-around flex-wrap "
-    >
+    // <form
+    //   onSubmit={(e) => e.preventDefault()}
+    //   className="flex w-[100%] justify-around flex-wrap "
+    // >
+    <>
       <section className="w-[400px]  max-w-[90%] flex xl:h-[60px] h-[45px] xl:m-5 m-3 relative">
         <input
           ref={verifyPasswordRef}
@@ -99,6 +100,7 @@ export default function PasswordField() {
           <p className="text-red-600 px-3"> {errorMessage}</p>
         )}
       </section>
-    </form>
+    </>
+    // </form>
   );
 }

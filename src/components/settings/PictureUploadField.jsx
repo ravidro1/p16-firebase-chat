@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, { useRef, useState } from "react";
 import useChatContext from "../../context/useChatContext";
 import useUsersContext from "../../context/useUsersContext";
 
@@ -7,8 +7,8 @@ export default function PictureUploadField() {
 
   const [progress, setProgress] = useState(null);
 
-  const {uploadImageToStorage} = useChatContext();
-  const {currentUser, updateUser} = useUsersContext();
+  const { uploadImageToStorage } = useChatContext();
+  const { currentUser, updateUser } = useUsersContext();
 
   const fileInputRef = useRef();
 
@@ -36,7 +36,6 @@ export default function PictureUploadField() {
     setFile(null);
   };
 
-  console.log(progress);
 
   return (
     <div className="w-[400px] flex xl:h-[60px] h-[45px] xl:m-5 m-3">

@@ -1,13 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ChatHeader from "./ChatHeader";
-import { useEffect } from "react";
-import { useState } from "react";
 import useUsersContext from "../../context/useUsersContext";
 import useChatContext from "../../context/useChatContext";
 import SendMessage from "./SendMessage";
 import ChatMessagesWindow from "./ChatMessagesWindow";
+import loadingIcon from "/assets/loading-icon.svg";
 
-export default function ChatRoom({ setIsSettingsOpen }) {
+export default function ChatRoom({ setIsSettingsOpen, chatLoading }) {
   const { currentUser, getUser } = useUsersContext();
   const { currentChatData } = useChatContext();
 
@@ -28,7 +27,7 @@ export default function ChatRoom({ setIsSettingsOpen }) {
   };
 
   return (
-    <div className="w-full h-full flex justify-center items-center  bg-[#DDE6ED]">
+    <div className="w-full h-full flex justify-center items-center relative bg-[#DDE6ED]">
       {currentChatData ? (
         <div className="w-full h-full">
           <section className="w-full h-[10%] bg-[#526D82]">
@@ -42,7 +41,17 @@ export default function ChatRoom({ setIsSettingsOpen }) {
           </section>{" "}
         </div>
       ) : (
-        <h1 className="text-white text-3xl"> selected room : null</h1>
+        <h1 className="text-white text-3xl"> Choose A Room To Start Chat</h1>
+      )}
+
+      {chatLoading && (
+        <div className="absolute w-full h-full bg-[#000000b5] flex justify-center items-center text-white">
+          <img
+            className="animate-spin w-[90px] aspect-square"
+            src={loadingIcon}
+            alt=""
+          />
+        </div>
       )}
     </div>
   );
