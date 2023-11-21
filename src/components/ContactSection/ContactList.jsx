@@ -35,6 +35,9 @@ export default function ContactList({
       (user) =>
         user.uid != currentUser.uid && user.nickName.includes(searchValue)
     );
+
+    // arrayOfUsers = arrayOfUsers.sort((a,b) => {return });
+
     setContactArray(arrayOfUsers);
   };
 

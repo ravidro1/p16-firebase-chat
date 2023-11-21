@@ -18,7 +18,9 @@ function SignUpPage() {
     useState(false);
 
   const register = async (event) => {
+    console.log("32142121");
     event.preventDefault();
+    // event.preventDefault();
     const data = new FormData(event.target);
     const formatData = {};
     const tempKeysWithErrors = {};
@@ -30,16 +32,16 @@ function SignUpPage() {
     }
 
     const isEmailFieldUnique = await checkUniqueField(
-      formatData["email"],
-      "email"
+      "email",
+      formatData["email"]
     );
     const isPhoneNumberFieldUnique = await checkUniqueField(
-      formatData["phoneNumber"],
-      "phoneNumber"
+      "phoneNumber",
+      formatData["phoneNumber"]
     );
     const isNickNameFieldUnique = await checkUniqueField(
-      formatData["nickName"],
-      "nickName"
+      "nickName",
+      formatData["nickName"]
     );
 
     if (!isEmailFieldUnique)
@@ -154,8 +156,11 @@ function SignUpPage() {
           keysWithErrors={keysWithErrors}
           pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
         />
-        <button className="m-6 w-[80%] bg-[#1C2B2D] px-4 py-2 text-2xl text-white hover:bg-[#1C2B2Dcc]">
-          Sign-Up
+        <button
+          type="submit"
+          className="m-6 w-[80%] bg-[#1C2B2D] px-4 py-2 text-2xl text-white hover:bg-[#1C2B2Dcc]"
+        >
+          SIGN-UP
         </button>{" "}
       </form>
 

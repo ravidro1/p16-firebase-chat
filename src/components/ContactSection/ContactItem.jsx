@@ -12,8 +12,9 @@ export default function ContactItem({ user, selectHandle }) {
   const [lastRoomMessage, setLastRoomMessage] = useState(null);
 
   useEffect(() => {
-    thisChat && getLastRoomMessage();
-  }, [thisChat]);
+    // thisChat &&
+    getLastRoomMessage();
+  }, [thisChat, user]);
 
   useEffect(() => {
     const combinedID =
@@ -39,6 +40,7 @@ export default function ContactItem({ user, selectHandle }) {
         lastMessage.user = await getUser(lastMessage?.user_id);
       setLastRoomMessage(lastMessage ? lastMessage : null);
     } catch (error) {
+      setLastRoomMessage(null);
       console.error(error);
     }
   };
