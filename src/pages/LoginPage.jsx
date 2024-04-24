@@ -12,22 +12,23 @@ function LoginPage() {
   const [isForgotMyPasswordClicked, setIsForgotMyPasswordClicked] =
     useState(false);
 
+  const [emailValue, setEmailValue] = useState("");
+  const [passwordValue, setPasswordValue] = useState("");
+
   const login = async (event) => {
     event.preventDefault();
-    const email = event.target.email.value;
-    const password = event.target.password.value;
 
     try {
-      const user = await loginAuth(email, password);
+      const user = await loginAuth(emailValue, passwordValue);
 
       setIsWrongCredentials(false);
 
-      event.target.email.value = "";
-      event.target.password.value = "";
+      setEmailValue("");
+      setPasswordValue("");
 
-      navigate(`/Home/${user.firstName}`);
+      navigate(`/Home`);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       setIsWrongCredentials(true);
     }
   };
@@ -36,16 +37,19 @@ function LoginPage() {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-around">
-      <h1 className=" text-center text-6xl text-white md:text-6xl lg:text-8xl">
+      <h1 className="hidden md:block text-center text-6xl text-white  md:text-8xl">
         CHAT
       </h1>
-      <h2 className="text-center text-2xl text-white "> LOGIN </h2>
 
-      <div className="flex h-[65%] w-[90%] flex-col items-center justify-evenly overflow-hidden rounded-lg bg-[#9BA4B5] shadow-2xl sm:w-[70%] md:w-[55%] lg:w-[35%]">
+      <div className="flex sm:h-[85%] md:h-[75%] flex-col items-center justify-around overflow-hidden sm:rounded-lg bg-[#9BA4B5] shadow-2xl h-full sm:w-[70%] lg:w-[40%] w-full">
+        <h1 className="sm:block m-2 text-center text-5xl sm:text-6xl text-white">
+          LOGIN{" "}
+        </h1>{" "}
         <section className="flex w-full flex-col items-center">
+          {" "}
           <form
             onChange={() => setIsWrongCredentials(false)}
-            onSubmit={login}
+            // onSubmit={login}
             className="flex w-[90%] flex-col items-center rounded-lg border-2 sm:w-[75%]"
           >
             {isWrongCredentials && (
@@ -55,14 +59,19 @@ function LoginPage() {
             )}
 
             <input
+              value={emailValue}
+              onChange={(e) => setEmailValue(e.target.value)}
               name="email"
               placeholder="Email"
               type="email"
               className="m-3 h-[50px] w-[90%] p-3"
               required
+              pattern={"^[A-Za-z][A-za-z0-9]*@[A-Za-z]+.[A-Za-z]{2,}"}
             />
 
             <input
+              value={passwordValue}
+              onChange={(e) => setPasswordValue(e.target.value)}
               required
               name="password"
               placeholder="Password"
@@ -71,13 +80,13 @@ function LoginPage() {
             />
 
             <button
-              type="submit"
+              onClick={login}
+              // type="submit"
               className="m-6 w-[80%] bg-[#1C2B2D] px-4 py-2 text-2xl text-white hover:bg-[#1C2B2Dcc]"
             >
               Login
             </button>
           </form>
-
           <button
             className="m-2 text-[#002B5B] hover:text-[#655DBB] hover:underline"
             onClick={() =>
@@ -101,12 +110,11 @@ function LoginPage() {
             {emailSentDisplay?.text}
           </h2>
         </section>
-
         <button
           className="w-fit text-lg text-[#002B5B] hover:text-[#655DBB] hover:underline"
           onClick={() => navigate("SignUp")}
         >
-          Go To Sign-Up
+          GO TO SIGN UP
         </button>
       </div>
     </div>

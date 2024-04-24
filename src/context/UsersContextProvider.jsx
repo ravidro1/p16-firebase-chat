@@ -15,12 +15,18 @@ import {
   where,
 } from "firebase/firestore";
 import FirebaseUsersHandler from "../firebase/FirebaseUsersHandler";
+import { useNavigate } from "react-router-dom";
 
 export const UsersContext = createContext();
 
 const UsersContextData = () => {
-  const { updateUser, allUsersData, deleteCurrentUser, signUpUser, getUser } =
-    FirebaseUsersHandler();
+  const {
+    updateUser,
+    allUsersData,
+    deleteUserByUserObject,
+    signUpUser,
+    getUser,
+  } = FirebaseUsersHandler();
 
   const [currentUser, setCurrentUser] = useState(null);
   const [currentUserData, setCurrentUserData] = useState(null);
@@ -81,9 +87,15 @@ const UsersContextData = () => {
       if (arrayOfUsers.length > 0) return false;
       return true;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return false;
     }
+  };
+
+  const deleteCurrentUser = async () => {
+    const copyCurrentUser = currentUser;
+    setCurrentUser(null);
+    await deleteUserByUserObject(copyCurrentUser);
   };
 
   return {

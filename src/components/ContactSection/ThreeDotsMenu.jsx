@@ -10,7 +10,6 @@ export default function ThreeDotsMenu({ setIsSettingsOpen }) {
   const [isNavBarOpen, setIsNavBarOpen] = useState(false);
 
   const ClickOutsideMenu = (e) => {
-    e.preventDefault();
     let dataValue = e.target.getAttribute("data-value");
     if (dataValue != "menu-button") setIsNavBarOpen(false);
   };

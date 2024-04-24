@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 export default function SignUpInput({
   typeOfInput = "text",
   placeholder,
+  setInputsValues,
   formDataKey,
   keysWithErrors,
   minLength = null,
@@ -28,14 +29,21 @@ export default function SignUpInput({
     setIsValid(false);
   }, [inputValue, keysWithErrors]);
 
+  useEffect(() => {
+    setInputsValues((prev) => {
+      return { ...prev, [formDataKey]: inputValue };
+    });
+  }, [inputValue]);
+
+  
   return (
-    <div className="flex w-[300px] max-w-[90%] flex-col">
-      <div className="relative flex justify-center">
+    <div className="flex w-[350px] flex-col max-w-[95%]">
+      <div className="w-full relative flex justify-center">
         <input
           ref={inputRef}
           pattern={pattern}
           className={
-            "h-[45px] w-[90%] p-2  text-black " +
+            "h-[45px] w-full p-2  text-black " +
             (inputValue.length > 0 && !isValid && "border-2 border-red-500 ")
           }
           placeholder={placeholder}

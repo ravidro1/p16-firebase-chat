@@ -55,7 +55,7 @@ function FirebaseUsersHandler() {
 
       isSuccess = true;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
 
     return new Promise((resolve, reject) => {
@@ -64,7 +64,7 @@ function FirebaseUsersHandler() {
     });
   };
 
-  const deleteCurrentUser = async (user) => {
+  const deleteUserByUserObject = async (user) => {
     try {
       await deleteObject(ref(storage, user.uid));
     } catch (error) {
@@ -86,7 +86,7 @@ function FirebaseUsersHandler() {
     allUsersData,
 
     updateUser,
-    deleteCurrentUser,
+    deleteUserByUserObject,
     signUpUser,
     getUser,
   };

@@ -33,7 +33,7 @@ export default function ContactList({
   const handleSearch = async () => {
     const arrayOfUsers = allUsersData.filter(
       (user) =>
-        user.uid != currentUser.uid && user.nickName.includes(searchValue)
+        user.uid != currentUser.uid && user.nickname.includes(searchValue)
     );
 
     // arrayOfUsers = arrayOfUsers.sort((a,b) => {return });
@@ -53,7 +53,7 @@ export default function ContactList({
 
       const res = await getChat(combinedID);
 
-      console.log(res.exists());
+      // console.log(res.exists());
       if (!res.exists()) {
         await createChat(combinedID, {
           messages: [],
@@ -89,7 +89,7 @@ export default function ContactList({
       setSearchValue("");
       setSelectedRoomId(combinedID);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setChatLoading(false);
     }

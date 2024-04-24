@@ -41,7 +41,7 @@ export default function ContactItem({ user, selectHandle }) {
       setLastRoomMessage(lastMessage ? lastMessage : null);
     } catch (error) {
       setLastRoomMessage(null);
-      console.error(error);
+      // console.error(error);
     }
   };
 
@@ -59,7 +59,7 @@ export default function ContactItem({ user, selectHandle }) {
       </section>
       <section className="h-full w-[30%] flex justify-start items-center">
         <h1 className="overflow-hidden overflow-ellipsis whitespace-nowrap text-xl mx-8 m-0">
-          {user.nickName}
+          {user.nickname}
         </h1>
       </section>
       <section className="h-full w-[50%] flex flex-col justify-center items-center">

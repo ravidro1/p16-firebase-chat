@@ -25,7 +25,7 @@ export default function ChatHeader({ otherUserData }) {
         alt=""
       />
       <h1 className="text-white w-[45%] text-2xl overflow-hidden overflow-ellipsis whitespace-nowrap text-start px-4">
-        {otherUserData?.nickName}
+        {otherUserData?.nickname}
       </h1>
     </div>
   );

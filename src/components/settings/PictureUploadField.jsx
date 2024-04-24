@@ -36,14 +36,14 @@ export default function PictureUploadField() {
     setFile(null);
   };
 
-
   return (
     <div className="w-[400px] flex xl:h-[60px] h-[45px] xl:m-5 m-3">
       <input
         ref={fileInputRef}
-        hidden={"hidden"}
+        className="hidden"
         onChange={(e) => setFile(e.target.files[0])}
         type="file"
+        accept="image/png, image/jpeg"
       />
       <button
         onClick={clearInput}
@@ -59,8 +59,8 @@ export default function PictureUploadField() {
         {progress
           ? Math.round(progress) + "%"
           : file
-          ? file.name
-          : "Choose File"}
+            ? file.name
+            : "Choose File"}
       </button>
       <button
         className="bg-[#1C2B2D] p-2 rounded-r-lg w-[30%]"

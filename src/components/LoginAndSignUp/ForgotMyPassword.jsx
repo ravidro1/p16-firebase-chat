@@ -13,7 +13,7 @@ function ForgotMyPassword({
     try {
       e.preventDefault();
 
-      console.log("click");
+      // console.log("click");
       const lowerEmailInput = emailInput.toLowerCase();
 
       const res = query(
@@ -29,7 +29,7 @@ function ForgotMyPassword({
         user = doc.data();
       });
 
-      console.log(user);
+      // console.log(user);
 
       if (user) {
         await emailjs.send(
@@ -55,7 +55,7 @@ function ForgotMyPassword({
       }
     } catch (error) {
       setEmailSentDisplay({
-        text: "Invalid Email",
+        text: "Server Error",
         status: "error",
       });
     } finally {
@@ -68,7 +68,7 @@ function ForgotMyPassword({
       <p>Get Your Credentials To Your Email</p>
       <form
         className="flex w-[100%] flex-col  items-center justify-center"
-        onSubmit={sendPasswordEmail}
+        // onSubmit={sendPasswordEmail}
       >
         <input
           className="m-1 h-[50px] w-[90%] p-3"
@@ -78,6 +78,7 @@ function ForgotMyPassword({
           type={"text"}
         />
         <button
+          onClick={sendPasswordEmail}
           className="m-1 h-[50px] w-[90%] bg-[#1C2B2D] px-4 py-2 text-2xl text-white hover:bg-[#1c2b2dcc]"
           type="submit"
         >
